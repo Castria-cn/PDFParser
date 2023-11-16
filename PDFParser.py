@@ -35,8 +35,15 @@ class PDFParser:
         若无法找到下标, 返回(None, None).
         """
         next_title = pattern.next_title(title_id)
-        start = content.find(next_title)
-        if start == -1:
+        if type(next_title) == str:
+            start = content.find(next_title)
+        elif type(next_title) == list:
+            indices = [content.find(title) for title in next_title]
+            start = len(content)
+            for idx in indices:
+                if idx >= 0 and idx < start:
+                    start = idx
+        if start == -1 or start == len(content):
             return None, None
         end = start + len(next_title)
         return (start + offset, end + offset)
@@ -88,6 +95,7 @@ class PDFParser:
         end = (self.page_num - 1) if end == -1 else end
 
         content = '\n'.join([page.extract_text() for page in self.pages[start:end+1]])
+        print(content)
 
         result = self._parse_str(content, title_id='root')
 
@@ -96,6 +104,6 @@ class PDFParser:
         return result
 
 if __name__ == '__main__':
-    parser = PDFParser('./data/sample.pdf')
-    root = parser.parse()
+    parser = PDFParser('./data/sample2.pdf')
+    root = parser.parse(end=0)
     root.show()

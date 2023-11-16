@@ -24,7 +24,8 @@ def mode(self) -> str:
 @abstractmethod
 def next_title(self, title: str) -> str:
     """
-    应当返回该模式下，给定 title 时的下一个标题。如next_title('1.') -> '2.'
+    应当返回该模式下，给定 title 时的下一个标题。可以以 str 形式或 List[str]形式返回，
+    如next_title('1.') -> '2.' 或 next_title('1.') -> ['2.', '2．'] (对应英文实心点和中文实心点)
     """
     pass
 ```
